@@ -33,6 +33,7 @@ An original, Minecraft-EULA-compliant Forge mod (`modid: tacticalchemthrowers`) 
 ### Core Specification & Agent Guidelines
 - **[SPECS.md](SPECS.md)** — Authoritative unified engineering specification, gameplay contract, architecture, and release gates.
 - **[AGENTS.md](AGENTS.md)** — Engineering handbook, dual-version adapter boundaries, EULA guardrails, and asset workflow for AI coding agents.
+- **[docs/LOCAL_EXECUTION_PROMPT.md](docs/LOCAL_EXECUTION_PROMPT.md)** — Optimal Antigravity configuration (`Orchestrator (Neon)` + `/teamwork`) and single copy-paste Master Prompt to execute Phases 2–6 locally from a fresh folder.
 
 ### Archive-Verified Compatibility & Integration Audits (`compatibility/`)
 - **[ECOSYSTEM_MATRIX.md](compatibility/ECOSYSTEM_MATRIX.md)** — Official CurseForge archive SHA-256 hashes and cross-version mod ecosystem matrix.
