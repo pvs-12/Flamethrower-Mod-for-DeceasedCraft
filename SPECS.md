@@ -287,14 +287,15 @@ All fuel definitions are loaded from datapacks (reloaded via `/reload` and synce
 | --- | --- | :---: | :---: | :---: | --- |
 | `#forge:plantoil` / `#forge:seed_oil` / `#forge:seedoil` (`createaddition:seed_oil`, `immersiveengineering:plantoil`) | Both packs *(CDG `plant_oil` recipe removed in `v6`)* | `3.4` (`0.85x`) | `0.65x` | `0.75x` | Emergency low-pressure vegetable oil: warm orange sputter, oily gray vapor |
 | `#forge:ethanol` / `#forge:biofuel` (`createaddition:bioethanol`, `immersiveengineering:ethanol`) | Both packs | `5.0` (`1.25x`) | `0.85x` | `0.90x` | Clean pale blue-white core, low soot, fast low-droop spray |
-| `#forge:creosote` (`immersiveengineering:creosote`) | Both packs | `4.0` (`1.00x`) | `0.90x` | `0.95x` | Heavy oily amber flame, thick dark coal-tar black smoke |
-| `#forge:biodiesel` (`immersiveengineering:biodiesel`, `createdieselgenerators:biodiesel`) | Both packs | `4.0` (`1.00x`) | `1.05x` | `1.00x` | Balanced golden-orange baseline flame, moderate black smoke |
-| `#forge:diesel` / `#forge:diesel_sulfur` (`immersivepetroleum:diesel*`, `createdieselgenerators:diesel`) | Both packs | `4.0` (`1.00x`) | `1.15x` | `1.05x` | High-energy sustained orange jet, pronounced soot plume |
-| `#forge:kerosene` / `#forge:naphtha` / `#forge:benzene` (`immersivepetroleum:*`) | `v5.5.5` only | `4.0–4.6` | `1.10–1.20x` | `1.05–1.15x` | Clean pressurized industrial distillate jets (`kerosene` tight/clean, `benzene` aromatic soot) |
-| `#forge:gasoline` (`immersivepetroleum:gasoline`, `createdieselgenerators:gasoline`) | Both packs | `5.0` (`1.25x`) | `1.25x` | `1.15x` | High-pressure volatile white-yellow roar, wide ignition flash |
-| `#forge:napalm` (`immersivepetroleum:napalm`) | `v5.5.5` only | `4.0` (`1.00x`) | `1.40x` | `1.20x` | Heavy sticky ballistic droop, intense crimson-gold burn, dense black smoke |
+| `#forge:creosote` (`immersiveengineering:creosote`) | Both packs | `3.6` (`0.90x`) | `0.75x` | `0.80x` | Heavy oily amber flame, thick dark coal-tar black smoke |
+| `#forge:crude_oil` (`immersivepetroleum:crudeoil`, `createdieselgenerators:crude_oil`) | Both packs | `5.0` (`1.25x`) | `0.85x` | `0.85x` | Unrefined heavy crude: viscous ballistic droop, roaring dark orange flame, very dense black soot |
+| `#forge:biodiesel` (`immersiveengineering:biodiesel`, `createdieselgenerators:biodiesel`) | Both packs | `4.0` (`1.00x`) | `1.00x` | `1.00x` | Balanced golden-orange baseline flame, moderate black smoke |
+| `#forge:diesel` / `#forge:diesel_sulfur` (`immersivepetroleum:diesel*`, `createdieselgenerators:diesel`) | Both packs | `4.0` (`1.00x`) | `1.00x` | `1.00x` | High-energy sustained orange jet, pronounced soot plume (`diesel_sulfur`: `0.95x` / sour soot) |
+| `#forge:kerosene` / `#forge:naphtha` / `#forge:benzene` (`immersivepetroleum:*`) | `v5.5.5` only | `4.2–4.8` | `1.10–1.20x` | `1.00–1.20x` | Clean pressurized industrial distillate jets (`kerosene` tight/clean, `benzene` aromatic soot) |
+| `#forge:gasoline` (`immersivepetroleum:gasoline`, `createdieselgenerators:gasoline`) | Both packs | `4.6` (`1.15x`) | `1.15x` | `1.15x` | High-pressure volatile white-yellow roar, wide ignition flash |
+| `#forge:napalm` (`immersivepetroleum:napalm`) | `v5.5.5` only | `5.0` (`1.25x`) | `1.35x` | `1.05x` | Heavy sticky ballistic droop, intense crimson-gold burn, dense black smoke |
 
-- **Explicitly Rejected Fluids (Default):** Raw unrefined `#forge:crude_oil` (`immersivepetroleum:crudeoil`, `createdieselgenerators:crude_oil`) is rejected by default so players refine crude via DeceasedCraft's Distillation Tower (`v5.5.5`) or Create: Diesel Generators Distillation Controller (`Beta-5.10.17`)—pack admins can enable it via datapack if desired. `car:*` (disabled in `v5.5.5`), lava, molten metals, acids, lubricants, and water/food fluids are always rejected.
+- **Explicitly Rejected Non-Fuels:** `car:*` (disabled in `v5.5.5`), lava, molten metals, acids, lubricants, fuel-blending additives, and water/food fluids are rejected. Raw `#forge:crude_oil` IS burnable out of the box, with lower efficiency and heavier droop/soot than refined diesel, gasoline, or napalm.
 
 ---
 
@@ -456,7 +457,20 @@ Do not hand-code raw PNG bytes or hand-type raw GeckoLib `.geo.json` bone/UV geo
 
 ---
 
-## 13. Testing & Release Gates
+## 13. Development Phases & Release Gates
+
+### 13.1 Development Phases Roadmap
+
+| Phase | Name | Release Gate | Status | Intuitive Summary |
+| :---: | --- | :---: | :---: | --- |
+| **Phase 1** | **Research, Specs, Audits & Asset Toolchain** | Gate A | **Done** | Unify the specs, audit every mod/fluid/recipe/config in both DeceasedCraft packs, and install/test our automated 2D (`mc-asset`) and 3D (`blockbench-mcp`) asset tools before writing Java. |
+| **Phase 2** | **Dual-Version Scaffolding & Handheld Core Vertical Slice** | Gate B | Next | Build the multi-version Gradle project (`:core`, `:forge-1.18.2`, `:forge-1.20.1`) and implement the playable handheld Tactical ChemThrower, canister-only reload, multi-fuel datapacks, heat ramp, braced stance, and temporary non-griefing fire. |
+| **Phase 3** | **3D Heavy Tactical + Create Assets, 4-Stage Flame VFX & Audio** | Gate B / D | Planned | Author the GeckoLib 3/4 heavy tactical + Create models, pure 1st-person gun+hands recoil animations, 4-stage crisp blocky flame-to-black-smoke particles, LabPBR `_s` night glow, dynamic lights, and mono `.ogg` layered sounds. |
+| **Phase 4** | **Automated Kinetic Turret & DeceasedCraft Ecosystem Integrations** | Gate C | Planned | Build the Create Shaft + Forge Energy + Fluid Pipe rotary turret with GUI/Wrench/Goggles, plus crafting recipes, Lootr-safe military/lab loot, and soft hooks for claims, teams, Zombie Awareness, Cold Sweat, and Legendary Survival Overhaul. |
+| **Phase 5** | **Shader Validation, Performance Profiling & Multiplayer Soak Testing** | Gate D | Planned | Verify visual quality across all 6 target Oculus shaders (BSL, Complementary Reimagined/Unbound + Euphoria, Photon, Bliss, Spooklementary) and Distant Horizons while profiling FPS/TPS and dedicated-server sync under horde stress. |
+| **Phase 6** | **Release Packaging, EULA Audit & Final Pack Verification** | Gate E | Planned | Produce clean, signed-off `1.18.2 (Forge 40.2.4)` and `1.20.1 (Forge 47.4.0)` release JARs, pass final EULA/hygiene scans, and publish player/server-admin documentation. |
+
+### 13.2 Release Gates
 
 A target build is not releasable until all applicable gates pass on the exact named DeceasedCraft pack release.
 
