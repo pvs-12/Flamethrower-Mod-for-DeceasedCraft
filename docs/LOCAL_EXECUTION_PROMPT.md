@@ -1,30 +1,96 @@
-# Local Master Execution Guide & Single-Prompt Kickoff (Phases 2–6)
+# Local Master Execution Guide & Copy-Paste Prompts (Phases 2–6)
 
-This document gives you **one single copy-paste prompt** to launch **Create: Tactical ChemThrowers** (`modid: tacticalchemthrowers`) from **Phase 2 through Phase 6** in a brand-new local Antigravity conversation inside **any new empty project folder**—tuned specifically for **Google AI Pro**, **minimal user inputs**, and **error-free multi-agent speed**.
+This document gives you **two sequential single-paste prompts** to launch **Create: Tactical ChemThrowers** (`modid: tacticalchemthrowers`) in a brand-new local Antigravity conversation inside **any new empty project folder**—tuned specifically for **Google AI Pro**, **minimal user inputs**, **clean workspace-only skill/plugin isolation**, and **error-free multi-agent speed**:
+
+- **Prompt 1 (Run Once First — 1–2 min):** Clones the repo, **disables all unrelated global skills, plugins, rules, and custom agents for this folder only** (using official Antigravity `.agents/*.json` discovery manifests so your other projects are unaffected), installs required `npm` tools (`mc-asset@0.6.0` + `sosadly/blockbench-mcp`), registers the workspace Blockbench MCP server, and creates & loads all project-specific skills inside `.agents/skills/`.
+- **Prompt 2 (Paste Right After Prompt 1):** Executes **Phases 2 → 6** autonomously via `/teamwork` on the freshly cleaned workspace, pausing cleanly after **Phase 5A** for your live GPU/shader playtest.
 
 ---
 
 ## 1. The Optimal Antigravity Setup (30-Second Launch Checklist)
 
-Before pasting the prompt below, set these four things in the **Google Antigravity App** (or CLI):
+Before pasting the prompts below, set these four things in the **Google Antigravity App** (or CLI):
 
 | Setting | Exact Value to Pick | Why |
 | --- | --- | --- |
-| **Model Selector** *(under prompt box)* | **`Orchestrator (Neon)`** *(default Pro quota saver)* — or **`Gemini 4 Neon (High)`** if you want zero executor handoffs on complex Java | `Orchestrator (Neon)` plans/reviews with **Gemini 4 Neon** and executes edits/tests with **Gemini 4 Hydrogen** (`~24%` less quota, `~19%` faster than monolithic heavy models, using your first-party Gemini quota). Do **not** select `Orchestrator (Carbon)` for the whole session—it burns ~32% more quota; the prompt reserves **Gemini 4 Carbon** selectively for high-stakes Gate C & Gate E audits. |
-| **Multi-Agent Command** | **`/teamwork`** *(already at the top of the prompt below)* | `/teamwork` is built for multi-milestone builds spanning hours/days: its Project Orchestrator automatically hands off to a fresh successor between milestones (preventing 512K context rot), enforces exclusive file ownership, and runs independent Critic/Challenger/Auditor gates. **Never stack `/swarm` + `/teamwork` + `/goal` together.** |
-| **Permissions** *(for minimal inputs)* | Allow safe command prefixes (`./gradlew`, `git`, `node`, `mc-asset`, `curl`) — or enable **Turbo** on the feature branch `dev/phases-2-6` | Prevents subagents from pausing repeatedly on terminal approvals (`Alt+J` / `Ctrl+K`). All work stays isolated on branch `dev/phases-2-6`. |
-| **Local Prerequisites** | **Java 17 JDK**, **Node.js 22+**, `npm install -g mc-asset@0.6.0`, and **Blockbench Desktop `v5.2.2+`** open with `blockbench_mcp.js` loaded (`http://127.0.0.1:8787/ping` → `{"ok":true}`) | See [tools/README.md](../tools/README.md#local-desktop-workflow-windows--macos--linux-gui) for one-time Blockbench plugin setup. Keep Blockbench open for **Phases 3–4**. |
+| **Model Selector** *(under prompt box)* | **`Orchestrator (Neon)`** *(default Pro quota saver)* — or **`Gemini 4 Neon (High)`** if you want zero executor handoffs on complex Java *(for Prompt 1 alone, even **`Gemini 4 Hydrogen`** works fast and cheap)* | `Orchestrator (Neon)` plans/reviews with **Gemini 4 Neon** and executes edits/tests with **Gemini 4 Hydrogen** (`~24%` less quota, `~19%` faster than monolithic heavy models, using your first-party Gemini quota). Do **not** select `Orchestrator (Carbon)` for the whole session—it burns ~32% more quota; Prompt 2 reserves **Gemini 4 Carbon** selectively for high-stakes Gate C & Gate E audits. |
+| **Multi-Agent Command** | **Prompt 1:** Plain prompt (no slash command)<br>**Prompt 2:** **`/teamwork`** *(already at the top of Prompt 2)* | Prompt 1 is a fast, deterministic local setup pass. Prompt 2 uses `/teamwork`, which is built for multi-milestone builds spanning hours/days (fresh orchestrator successor between milestones preventing 512K context rot, exclusive file ownership, independent Critic/Challenger/Auditor gates). **Never stack `/swarm` + `/teamwork` + `/goal` together.** |
+| **Permissions** *(for minimal inputs)* | Allow safe command prefixes (`./gradlew`, `git`, `node`, `npm`, `mc-asset`, `curl`) — or enable **Turbo** on feature branch `dev/phases-2-6` | Prevents subagents from pausing repeatedly on terminal approvals (`Alt+J` / `Ctrl+K`). All build work stays isolated on branch `dev/phases-2-6`. |
+| **Local Prerequisites** | **Java 17 JDK**, **Node.js 22+**, and **Blockbench Desktop `v5.2.2+`** *(open with `blockbench_mcp.js` loaded for Phases 3–4)* | Prompt 1 automatically installs `mc-asset@0.6.0` and builds `sosadly/blockbench-mcp`, and checks Java 17, Node 22+, and `http://127.0.0.1:8787/ping`. See [tools/README.md](../tools/README.md#local-desktop-workflow-windows--macos--linux-gui) for the one-time Blockbench plugin load click. |
 
-**Your total inputs across Phases 2 → 6:**
-1. Open your new local project folder in Antigravity, select **`Orchestrator (Neon)`**, and paste the single prompt below.
-2. Click **Approve** once when `/teamwork` displays its pre-filled brief artifact (all scoping questions are already answered inside the prompt).
-3. When the team pauses cleanly after **Phase 5A**, drop the two built JARs into your local DeceasedCraft instances, run the guided live GPU/shader checklist, and reply with your results/logs so the team finishes **Phase 5C** and **Phase 6**.
+**Your total inputs across the entire project (Setup + Phases 2 → 6):**
+1. Open your new empty project folder in Antigravity, select **`Orchestrator (Neon)`**, and paste **Prompt 1**.
+2. Once Prompt 1 reports `"Workspace armed"`, paste **Prompt 2** (if on CLI, run `/skills reload` first) and click **Approve** once on Teamwork's pre-filled brief.
+3. When Teamwork pauses after **Phase 5A**, test the two built JARs in DeceasedCraft (`v5.5.5` & `Beta-5.10.17`) against the guided 6-shader checklist and reply with your results/logs so it completes **Phase 5C** and **Phase 6**.
 
 ---
 
-## 2. The Single Copy-Paste Master Prompt (Phases 2 → 6)
+## 2. Prompt 1 — Workspace Bootstrap, Skill/Plugin Cleanup & Tool Loader (Run Once First)
 
-Copy everything inside the fenced block below and paste it directly into your new local Antigravity conversation:
+Copy everything inside the fenced block below and paste it first into your new empty local folder:
+
+````markdown
+Prepare this local workspace folder for **Create: Tactical ChemThrowers** (`modid: tacticalchemthrowers`) by cloning/updating the repo, disabling all unrelated skills/plugins/rules/custom agents **for this folder only**, installing required npm/asset tools, and creating + loading all necessary workspace skills. Execute every step automatically and report a clean verification table at the end.
+
+### STEP 1: REPO BOOTSTRAP & GIT SAFETY
+1. If this folder is empty / not a git repo, clone `https://github.com/pvs-12/Flamethrower-Mod-for-DeceasedCraft.git` directly into `.` (or `./Flamethrower-Mod-for-DeceasedCraft` if unrelated files exist, then work inside that repo root). Otherwise run `git fetch origin && git pull --ff-only origin main`.
+2. Create or switch to branch `dev/phases-2-6`.
+3. Add local machine-specific Antigravity files to `.git/info/exclude` (do NOT pollute tracked `.gitignore` with personal paths) so they are never committed:
+   - `.agents/mcp_config.json`
+   - `.agents/plugins.json`
+   - `.agents/skills.json`
+   - `.agents/rules.json`
+   - `.agents/agents.json`
+
+### STEP 2: DISABLE ALL UNRELATED SKILLS, PLUGINS, RULES & CUSTOM AGENTS (FOR THIS FOLDER ONLY)
+Use Antigravity's official **workspace discovery manifests** inside `<repo-root>/.agents/` so unrelated personal/global customizations are hidden **only inside this project folder** without modifying or breaking my other projects (note: wildcards are NOT supported by Antigravity manifests—always write exact literal names):
+1. Dynamically inventory every currently available skill, plugin, rule, and custom agent:
+   - Call `list_skills` (if available) and scan `~/.gemini/config/{skills,plugins,rules,agents}/` (plus check `agy plugin list --json` if `agy` CLI is on PATH).
+   - Also check `~/.gemini/antigravity-cli/skills/` and `~/.gemini/skills/` (if on Antigravity CLI, warn me if any unrelated skills exist there since CLI-only folders override manifest `exclude`).
+2. Classify every discovered item strictly:
+   - **KEEP ONLY** customizations directly relevant to this Java/Minecraft Forge/Create/GeckoLib/GitHub/Blockbench/`mc-asset` project (for example: `github`, `env-setup`, and the 3 workspace skills created in Step 4 below).
+   - **EXCLUDE ALL UNRELATED** skills, plugins, rules, and custom agents—including web/frontend/CSS/React/Next.js/Expo/React Native/Swift/Apple-design/Sonner/UI-UX/generative-UI/animation-web skills and Google Workspace plugins (`gdocs`, `gsheets`, `gslides`, `gcalendar`, `gdrive`, `gmail`, etc.) and any unrelated personal/work plugins or rules.
+3. Write valid JSON discovery manifests inside `<repo-root>/.agents/` with the exact literal excluded names:
+   - `.agents/skills.json` → `{ "exclude": [ ...exact unrelated skill names... ] }`
+   - `.agents/plugins.json` → `{ "exclude": [ ...exact unrelated plugin folder/names... ] }`
+   - `.agents/rules.json` → `{ "exclude": [ ...exact unrelated personal rule filenames... ] }`
+   - `.agents/agents.json` → `{ "exclude": [ ...exact unrelated custom agent names... ] }`
+   *(Leave an empty `[]` for any category that has no unrelated items; validate every JSON file parses cleanly.)*
+
+### STEP 3: INSTALL REQUIRED NPM PACKAGES, ASSET TOOLS & WORKSPACE MCP CONFIG
+Install all third-party tools **outside the git repo** (never put `node_modules` or cloned repos inside the mod repo):
+1. Check `java -version` (verify Java 17 JDK is installed; if missing, print the exact install command for my OS) and `node -v` (verify Node.js 22+).
+2. Install/verify **`mc-asset@0.6.0`**:
+   - If `mc-asset --version` is missing or not `0.6.x`, run `npm install -g mc-asset@0.6.0` (or install into `~/.local/share/mc-asset-tools` on Linux/macOS or `%USERPROFILE%\.local\share\mc-asset-tools` on Windows if global npm lacks permissions).
+   - Verify `mc-asset --version` succeeds.
+3. Install/build **`sosadly/blockbench-mcp`** outside the git repo:
+   - Target path: `$HOME/.local/share/blockbench-mcp` (Windows: `%USERPROFILE%\.local\share\blockbench-mcp`).
+   - If not present, run `git clone https://github.com/sosadly/blockbench-mcp.git <target> && cd <target> && npm ci && npm run build`.
+   - Verify `<target>/dist/index.js` and `<target>/plugin/blockbench_mcp.js` exist.
+4. Configure workspace-scoped Blockbench MCP in `<repo-root>/.agents/mcp_config.json` (using an absolute path to `<target>/dist/index.js` and unique server name `"tacticalchemthrowers-blockbench"` with `"env": { "BLOCKBENCH_MCP_PORT": "8787" }` so it never collides with global MCP servers).
+5. Probe `curl -s http://127.0.0.1:8787/ping` (or PowerShell `Invoke-RestMethod` on Windows). If Blockbench Desktop is not running or `blockbench_mcp.js` is not loaded yet, print the exact 1-line path to `<target>/plugin/blockbench_mcp.js` so I can load it in Blockbench Desktop (**File → Plugins → Load Plugin from File**).
+
+### STEP 4: CREATE & LOAD WORKSPACE-SPECIFIC PROJECT SKILLS (`.agents/skills/*/SKILL.md`)
+Read `AGENTS.md`, `SPECS.md`, `compatibility/API_AND_INTEGRATION_RESEARCH.md`, `compatibility/RECIPE_AND_FLUID_AUDIT.md`, and `tools/README.md`, then create these 3 focused, concise workspace skills inside `<repo-root>/.agents/skills/` (each directly one level deep with valid YAML `name` and `description` frontmatter so Antigravity discovers them automatically on the next turn):
+1. `.agents/skills/mc-asset-pipeline/SKILL.md` — Exact `mc-asset@0.6.0` CLI workflow for 16x16/32x32 item/GUI textures, 4-stage blocky flame-to-black-smoke vertical strips + `.mcmeta`, LabPBR 1.3 `_s.png` emissive maps (`A = 1–254`), and mandatory `mc-asset validate` checks.
+2. `.agents/skills/blockbench-geckolib/SKILL.md` — Exact single-owner `blockbench-mcp` / `tools/bb_mcp_client.mjs` workflow for Heavy Tactical + Create `.bbmodel` authoring (handheld Tier 1/2/3 barrels, canister, armored turret with fixed ports), GeckoLib 3 (`1.18.2`) vs GeckoLib 4 (`1.20.1`) exports, and multi-angle PNG screenshot verification.
+3. `.agents/skills/deceasedcraft-dual-forge/SKILL.md` — Exact dual-version guardrails (`1.18.2` Forge `40.2.4` / Create `0.5.1.f` / GeckoLib `3.0.57` / IP / Lucent / Cold Sweat vs `1.20.1` Forge `47.4.0` / Create `6.0.6` / GeckoLib `4.7` / CDG + KubeJS `material.js` / Sodium Dynamic Lights / LSO), including: burnable `#forge:crude_oil`, `immersiveengineering:component_electronic` instead of `create:electron_tube`, turret blockstate `lightLevel = 14`, `#minecraft:is_fire` for Firefighter armor, strict EULA compliance, and zero client imports in server code.
+
+### STEP 5: VERIFY & HAND OFF
+1. Validate all JSON files under `.agents/` and all YAML frontmatter under `.agents/skills/*/SKILL.md`.
+2. Run `git status --short` to confirm no `node_modules`, third-party clones, or machine-local `.agents/*.json` files are untracked/staged.
+3. Print a concise summary table showing:
+   - Excluded unrelated skills/plugins/rules/agents (count + names)
+   - Active workspace skills loaded (3 skills + paths)
+   - Tool status (`Java 17`, `Node 22+`, `mc-asset 0.6.0`, `blockbench-mcp` build, `http://127.0.0.1:8787/ping`)
+   - Ready banner confirming: **"Workspace armed! (Run `/skills reload` if on CLI, then paste Prompt 2 from `docs/LOCAL_EXECUTION_PROMPT.md`.)"**
+````
+
+---
+
+## 3. Prompt 2 — The Single Copy-Paste Master Build Prompt (Phases 2 → 6)
+
+After Prompt 1 prints **"Workspace armed!"** *(and you've run `/skills reload` if using the CLI)*, copy everything inside the fenced block below and paste it into your local Antigravity conversation:
 
 ````markdown
 /teamwork Build and release **Create: Tactical ChemThrowers** (`modid: tacticalchemthrowers`) across Phases 2 through 6 for DeceasedCraft v5.5.5 (MC 1.18.2 / Forge 40.2.4) and DeceasedCraft Beta-5.10.17 (MC 1.20.1 / Forge 47.4.0 Standard + DH Edition), pausing cleanly after Phase 5A for my live GPU/shader playtest before completing Phase 5C fixes and Phase 6 release packaging.
@@ -130,7 +196,7 @@ To maximize speed without collisions, quota waste, or errors:
 
 ---
 
-## 3. Optional Power-Command Fallbacks (When You Want Manual Control)
+## 4. Optional Power-Command Fallbacks (When You Want Manual Control)
 
 Only use these **instead of** the `/teamwork` master prompt (never stacked on top of it):
 
